@@ -43,7 +43,30 @@
     },
     "bundle": {
       "name": "bundle",
-      "description": "Prepare assets"
+      "description": "Prepare assets",
+      "steps": [
+        {
+          "spawn": "bundle:api/api.lambda"
+        }
+      ]
+    },
+    "bundle:api/api.lambda": {
+      "name": "bundle:api/api.lambda",
+      "description": "Create a JavaScript bundle from src/api/api.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/api/api.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/api/api.lambda/index.js\" --external:aws-sdk"
+        }
+      ]
+    },
+    "bundle:api/api.lambda:watch": {
+      "name": "bundle:api/api.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/api/api.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/api/api.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/api/api.lambda/index.js\" --external:aws-sdk --watch"
+        }
+      ]
     },
     "clobber": {
       "name": "clobber",

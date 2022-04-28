@@ -4,6 +4,8 @@
     "build": "npx projen build",
     "bump": "npx projen bump",
     "bundle": "npx projen bundle",
+    "bundle:api/api.lambda": "npx projen bundle:api/api.lambda",
+    "bundle:api/api.lambda:watch": "npx projen bundle:api/api.lambda:watch",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",
@@ -52,7 +54,8 @@
   "dependencies": {
     "aws-cdk-lib": "^2.22.0",
     "cdk-nag": "^2.0.0",
-    "constructs": "^10.0.5"
+    "constructs": "^10.0.5",
+    "dotenv": "^16.0.0"
   },
   "license": "EUPL-1.2",
   "version": "0.0.0",

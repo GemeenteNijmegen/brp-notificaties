@@ -19,6 +19,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   },
   deps: [
     'cdk-nag@^2.0.0',
+    'dotenv'
   ],
   gitignore: [
     'test-reports/junit.xml',
@@ -39,11 +40,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
       run: 'mkdir -p dist && tar -czvf ./dist/cdk.out.tar.gz ./cdk.out',
     },
   ],
-  
-  // deps: [],                /* Runtime dependencies of this module. */
-  // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  // devDeps: [],             /* Build dependencies for this module. */
-  // packageName: undefined,  /* The "name" in package.json. */
 });
 
 /**
