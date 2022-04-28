@@ -1,11 +1,9 @@
-import { App, Aspects } from 'aws-cdk-lib';
-import { AwsSolutionsChecks } from 'cdk-nag';
+import { App } from 'aws-cdk-lib';
 import { PipelineStackAcceptance } from './PipelineStackAcceptance';
 import { PipelineStackDevelopment } from './PipelineStackDevelopment';
 import { PipelineStackProduction } from './PipelineStackProduction';
 
 const app = new App();
-
 
 const deploymentEnvironment = {
   account: '418648875085',
@@ -52,7 +50,5 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
     },
   );
 }
-
-Aspects.of(app).add(new AwsSolutionsChecks());
 
 app.synth();

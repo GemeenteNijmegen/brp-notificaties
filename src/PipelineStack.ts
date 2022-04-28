@@ -1,5 +1,6 @@
-import { Stack, StackProps, Tags, pipelines, Environment, aws_ssm as SSM } from 'aws-cdk-lib';
+import { Stack, StackProps, Tags, pipelines, Environment } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import { ApiStage } from './ApiStage';
 import { Statics } from './Statics';
 
 export interface PipelineStackProps extends StackProps{
@@ -14,15 +15,19 @@ export class PipelineStack extends Stack {
     Tags.of(this).add('cdkManaged', 'yes');
     Tags.of(this).add('Project', Statics.projectName);
     this.branchName = props.branchName;
-    //const pipeline = this.pipeline();
+
+    const pipeline = this.pipeline();
+
+    pipeline.addStage(new ApiStage(this, 'brp-notificaties-stage', {
+      branch: props.branchName,
+    }));
 
   }
 
   pipeline(): pipelines.CodePipeline {
-    const connectionArn = SSM.StringParameter.valueForStringParameter(this, Statics.codeStarConnectionArn);
 
     const source = pipelines.CodePipelineSource.connection(Statics.projectRepo, this.branchName, {
-      connectionArn: connectionArn,
+      connectionArn: Statics.codeStarConnectionArn,
     });
 
     const pipeline = new pipelines.CodePipeline(this, `brp-notificaties-${this.branchName}`, {
