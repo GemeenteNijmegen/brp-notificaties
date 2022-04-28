@@ -53,8 +53,6 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
   );
 }
 
-
-
 Aspects.of(app).add(new AwsSolutionsChecks());
 
 app.synth();

@@ -20,7 +20,7 @@ export class PipelineStack extends Stack {
 
   pipeline(): pipelines.CodePipeline {
     const connectionArn = SSM.StringParameter.valueForStringParameter(this, Statics.codeStarConnectionArn);
-    
+
     const source = pipelines.CodePipelineSource.connection(Statics.projectRepo, this.branchName, {
       connectionArn: connectionArn,
     });

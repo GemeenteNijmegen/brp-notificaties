@@ -46,25 +46,25 @@
       "description": "Prepare assets",
       "steps": [
         {
-          "spawn": "bundle:api/api.lambda"
+          "spawn": "bundle:app/api.lambda"
         }
       ]
     },
-    "bundle:api/api.lambda": {
-      "name": "bundle:api/api.lambda",
-      "description": "Create a JavaScript bundle from src/api/api.lambda.ts",
+    "bundle:app/api.lambda": {
+      "name": "bundle:app/api.lambda",
+      "description": "Create a JavaScript bundle from src/app/api.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/api/api.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/api/api.lambda/index.js\" --external:aws-sdk"
+          "exec": "esbuild --bundle src/app/api.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/app/api.lambda/index.js\" --external:aws-sdk"
         }
       ]
     },
-    "bundle:api/api.lambda:watch": {
-      "name": "bundle:api/api.lambda:watch",
-      "description": "Continuously update the JavaScript bundle from src/api/api.lambda.ts",
+    "bundle:app/api.lambda:watch": {
+      "name": "bundle:app/api.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/api.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/api/api.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/api/api.lambda/index.js\" --external:aws-sdk --watch"
+          "exec": "esbuild --bundle src/app/api.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/app/api.lambda/index.js\" --external:aws-sdk --watch"
         }
       ]
     },

@@ -10,16 +10,16 @@ export interface ApiFunctionProps extends lambda.FunctionOptions {
 }
 
 /**
- * An AWS Lambda function which executes src/api/api.
+ * An AWS Lambda function which executes src/app/api.
  */
 export class ApiFunction extends lambda.Function {
   constructor(scope: Construct, id: string, props?: ApiFunctionProps) {
     super(scope, id, {
-      description: 'src/api/api.lambda.ts',
+      description: 'src/app/api.lambda.ts',
       ...props,
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../assets/api/api.lambda')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../assets/app/api.lambda')),
     });
     this.addEnvironment('AWS_NODEJS_CONNECTION_REUSE_ENABLED', '1', { removeInEdge: true });
   }

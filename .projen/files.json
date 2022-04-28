@@ -15,7 +15,7 @@
     ".projen/tasks.json",
     "cdk.json",
     "LICENSE",
-    "src/api/api-function.ts",
+    "src/app/api-function.ts",
     "tsconfig.dev.json",
     "tsconfig.json"
   ],
