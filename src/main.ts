@@ -28,7 +28,7 @@ const productionEnvironment = {
 };
 
 if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'development') {
-  new PipelineStackDevelopment(app, 'mijnuitkering-pipeline-development',
+  new PipelineStackDevelopment(app, 'brp-notificaties-pipeline-development',
     {
       env: deploymentEnvironment,
       branchName: 'development',
@@ -36,7 +36,7 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
     },
   );
 } else if (process.env.BRANCH_NAME == 'acceptance') {
-  new PipelineStackAcceptance(app, 'mijnuitkering-pipeline-acceptance',
+  new PipelineStackAcceptance(app, 'brp-notificaties-pipeline-acceptance',
     {
       env: deploymentEnvironment,
       branchName: 'acceptance',
@@ -44,7 +44,7 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
     },
   );
 } else if (process.env.BRANCH_NAME == 'production') {
-  new PipelineStackProduction(app, 'mijnuitkering-pipeline-production',
+  new PipelineStackProduction(app, 'brp-notificaties-pipeline-production',
     {
       env: deploymentEnvironment,
       branchName: 'production',
