@@ -146,7 +146,7 @@
         "devDependencies": [
           "**/test/**",
           "**/build-tools/**",
-          "src/app/api.lambda.ts"
+          "src/app/webhook.lambda.ts"
         ],
         "optionalDependencies": false,
         "peerDependencies": true

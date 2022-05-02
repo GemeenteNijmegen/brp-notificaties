@@ -7,10 +7,15 @@ export class Statics {
   static readonly ssmEnvRootHostedZoneId: string = '/gemeente-nijmegen/account/hostedzone/id';
   static readonly ssmEnvRootHostedZoneName: string = '/gemeente-nijmegen/account/hostedzone/name';
 
-  static readonly ssmZoneId: string = '/gemeente-nijmegen/brp/notificaties/hostedzone/id';
-  static readonly ssmZoneName: string = '/gemeente-nijmegen/brp/notificaties/hostedzone/name';
+  static readonly ssmZoneId: string = '/gemeente-nijmegen/brp-notificaties/hostedzone/id';
+  static readonly ssmZoneName: string = '/gemeente-nijmegen/brp-notificaties/hostedzone/name';
 
   static readonly ssmAccountDnsSecKmsKey: string = '/gemeente-nijmegen/account/dnssec/kmskey/arn';
+
+  /**
+   * Internal SSM parameters
+   */
+  static readonly ssmApiGatewayId: string = '/gemeente-nijmegen/brp-notificaties/api-gateway/id';
 
   /**
    * Pipeline values

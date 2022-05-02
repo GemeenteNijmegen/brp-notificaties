@@ -4,8 +4,8 @@
     "build": "npx projen build",
     "bump": "npx projen bump",
     "bundle": "npx projen bundle",
-    "bundle:app/api.lambda": "npx projen bundle:app/api.lambda",
-    "bundle:app/api.lambda:watch": "npx projen bundle:app/api.lambda:watch",
+    "bundle:app/webhook.lambda": "npx projen bundle:app/webhook.lambda",
+    "bundle:app/webhook.lambda:watch": "npx projen bundle:app/webhook.lambda:watch",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",
@@ -52,6 +52,8 @@
     "typescript": "^4.6.3"
   },
   "dependencies": {
+    "@aws-cdk/aws-apigatewayv2-alpha": "^2.22.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.22.0-alpha.0",
     "aws-cdk-lib": "^2.22.0",
     "cdk-nag": "^2.0.0",
     "constructs": "^10.0.5",

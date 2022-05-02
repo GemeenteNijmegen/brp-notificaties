@@ -9,7 +9,9 @@ export interface PipelineStackProps extends StackProps{
 }
 
 export class PipelineStack extends Stack {
+
   branchName: string;
+
   constructor(scope: Construct, id: string, props: PipelineStackProps) {
     super(scope, id, props);
     Tags.of(this).add('cdkManaged', 'yes');
@@ -18,7 +20,8 @@ export class PipelineStack extends Stack {
 
     const pipeline = this.pipeline();
 
-    pipeline.addStage(new ApiStage(this, 'brp-notificaties-stage', {
+    pipeline.addStage(new ApiStage(this, 'brp-notificaties', {
+      env: props.deployToEnvironment,
       branch: props.branchName,
     }));
 

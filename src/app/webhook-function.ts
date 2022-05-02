@@ -4,22 +4,22 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 
 /**
- * Props for ApiFunction
+ * Props for WebhookFunction
  */
-export interface ApiFunctionProps extends lambda.FunctionOptions {
+export interface WebhookFunctionProps extends lambda.FunctionOptions {
 }
 
 /**
- * An AWS Lambda function which executes src/app/api.
+ * An AWS Lambda function which executes src/app/webhook.
  */
-export class ApiFunction extends lambda.Function {
-  constructor(scope: Construct, id: string, props?: ApiFunctionProps) {
+export class WebhookFunction extends lambda.Function {
+  constructor(scope: Construct, id: string, props?: WebhookFunctionProps) {
     super(scope, id, {
-      description: 'src/app/api.lambda.ts',
+      description: 'src/app/webhook.lambda.ts',
       ...props,
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../assets/app/api.lambda')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../assets/app/webhook.lambda')),
     });
     this.addEnvironment('AWS_NODEJS_CONNECTION_REUSE_ENABLED', '1', { removeInEdge: true });
   }
