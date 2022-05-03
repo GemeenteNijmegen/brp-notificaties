@@ -42,7 +42,7 @@ export class ApiStack extends Stack {
     });
 
     this.api.addRoutes({
-      integration: new HttpLambdaIntegration('login', webhook),
+      integration: new HttpLambdaIntegration('webhook', webhook),
       path: '/',
       methods: [apigatewayv2.HttpMethod.POST],
     });

@@ -26,6 +26,7 @@ const productionEnvironment = {
 };
 
 if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'development') {
+  console.log('Building development branch');
   new PipelineStackDevelopment(app, 'brp-notificaties-pipeline-development',
     {
       env: deploymentEnvironment,
@@ -34,6 +35,7 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
     },
   );
 } else if (process.env.BRANCH_NAME == 'acceptance') {
+  console.log('Building acceptance branch');
   new PipelineStackAcceptance(app, 'brp-notificaties-pipeline-acceptance',
     {
       env: deploymentEnvironment,
@@ -42,6 +44,7 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
     },
   );
 } else if (process.env.BRANCH_NAME == 'production') {
+  console.log('Building production branch');
   new PipelineStackProduction(app, 'brp-notificaties-pipeline-production',
     {
       env: deploymentEnvironment,
