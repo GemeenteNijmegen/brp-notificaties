@@ -1,6 +1,7 @@
 import { Stack, StackProps, Tags, pipelines, Environment } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ApiStage } from './ApiStage';
+import { DnsStage } from './DnsStack';
 import { Statics } from './Statics';
 
 export interface PipelineStackProps extends StackProps{
@@ -22,6 +23,14 @@ export class PipelineStack extends Stack {
 
     pipeline.addStage(new ApiStage(this, 'brp-notificaties', {
       env: props.deployToEnvironment,
+      branch: props.branchName,
+    }));
+
+    pipeline.addStage(new DnsStage(this, 'brp-notificaties-us-east-1', {
+      env: {
+        account: props.deployToEnvironment.account,
+        region: 'us-east-1',
+      },
       branch: props.branchName,
     }));
 

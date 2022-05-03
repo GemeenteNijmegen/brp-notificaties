@@ -1,4 +1,5 @@
-import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
+import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM, Stage, Aspects, StageProps } from 'aws-cdk-lib';
+import { AwsSolutionsChecks } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { Statics } from './Statics';
 
@@ -53,12 +54,12 @@ export class DnsStack extends Stack {
      * for use in other stages (Cloudfront).
      */
   private addZoneIdAndNametoParams() {
-    new SSM.StringParameter(this, 'mijn-hostedzone-id', {
+    new SSM.StringParameter(this, 'brp-events-hostedzone-id', {
       stringValue: this.zone.hostedZoneId,
       parameterName: Statics.ssmZoneId,
     });
 
-    new SSM.StringParameter(this, 'mijn-hostedzone-name', {
+    new SSM.StringParameter(this, 'brp-events-hostedzone-name', {
       stringValue: this.zone.zoneName,
       parameterName: Statics.ssmZoneName,
     });
@@ -71,7 +72,7 @@ export class DnsStack extends Stack {
 
     // Use the account kms key for dnssec (this stack should be in us-east-1)
     const dnssecKeySigning = new Route53.CfnKeySigningKey(this, 'dnssec-keysigning-key', {
-      name: 'dnssec_with_kms',
+      name: 'ksk_brp_notificaties',
       status: 'ACTIVE',
       hostedZoneId: this.zone.hostedZoneId,
       keyManagementServiceArn: Statics.ssmAccountDnsSecKmsKey,
@@ -82,6 +83,25 @@ export class DnsStack extends Stack {
       hostedZoneId: this.zone.hostedZoneId,
     });
     dnssec.node.addDependency(dnssecKeySigning);
+  }
+
+}
+
+export interface DnsStageProps extends StageProps{
+  branch: string;
+}
+
+export class DnsStage extends Stage {
+
+  constructor(scope: Construct, id: string, props: DnsStageProps){
+    super(scope, id, props);
+
+    const dnsStack = new DnsStack(this, 'dns-stack', {
+      branch: props.branch,
+    });
+
+    Aspects.of(dnsStack).add(new AwsSolutionsChecks());
+    
   }
 
 }
