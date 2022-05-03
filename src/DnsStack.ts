@@ -38,7 +38,7 @@ export class DnsStack extends Stack {
     }
     new Route53.ZoneDelegationRecord(this, 'zone-delegation', {
       nameServers: this.zone.hostedZoneNameServers,
-      zone: this.accountRootZone,
+      zone: this.zone,
     });
 
     // Export sub zone paramters
