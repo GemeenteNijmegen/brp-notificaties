@@ -48,7 +48,7 @@ export class DnsStack extends Stack {
     this.addZoneIdAndNametoParams();
 
     // Development (sandbox) does not have a kms key
-    if (Statics.isDevelopment(props.branch)) {
+    if (Statics.isDevelopment(props.branch) == false) {
       this.setupDnsSec();
     }
 
