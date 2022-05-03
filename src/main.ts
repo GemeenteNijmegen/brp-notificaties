@@ -2,6 +2,7 @@ import { App } from 'aws-cdk-lib';
 import { PipelineStackAcceptance } from './PipelineStackAcceptance';
 import { PipelineStackDevelopment } from './PipelineStackDevelopment';
 import { PipelineStackProduction } from './PipelineStackProduction';
+import { Statics } from './Statics';
 
 const app = new App();
 
@@ -25,7 +26,7 @@ const productionEnvironment = {
   region: 'eu-west-1',
 };
 
-if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'development') {
+if (Statics.isDevelopment(process.env.BRANCH_NAME)) {
   console.log('Building development branch');
   new PipelineStackDevelopment(app, 'brp-notificaties-pipeline-development',
     {
@@ -34,7 +35,7 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
       deployToEnvironment: sandboxEnvironment,
     },
   );
-} else if (process.env.BRANCH_NAME == 'acceptance') {
+} else if (Statics.isAcceptance(process.env.BRANCH_NAME)) {
   console.log('Building acceptance branch');
   new PipelineStackAcceptance(app, 'brp-notificaties-pipeline-acceptance',
     {
@@ -43,7 +44,7 @@ if ('BRANCH_NAME' in process.env == false || process.env.BRANCH_NAME == 'develop
       deployToEnvironment: acceptanceEnvironment,
     },
   );
-} else if (process.env.BRANCH_NAME == 'production') {
+} else if (Statics.isProduction(process.env.BRANCH_NAME)) {
   console.log('Building production branch');
   new PipelineStackProduction(app, 'brp-notificaties-pipeline-production',
     {

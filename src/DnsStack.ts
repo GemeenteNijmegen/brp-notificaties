@@ -1,5 +1,5 @@
-import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM, Stage, Aspects, StageProps } from 'aws-cdk-lib';
-import { AwsSolutionsChecks } from 'cdk-nag';
+import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM, Stage, StageProps } from 'aws-cdk-lib';
+import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Statics } from './Statics';
 
@@ -20,8 +20,13 @@ export class DnsStack extends Stack {
     super(scope, id);
     this.branch = props.branch;
 
-    const rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.ssmEnvRootHostedZoneId);
-    const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.ssmEnvRootHostedZoneName);
+    const parameters = new RemoteParameters(this, 'account-zone-params', {
+      path: Statics.ssmEnvRootHostedParams,
+      region: 'eu-west-1',
+    });
+
+    const rootZoneId = parameters.get(Statics.ssmEnvRootHostedZoneId);
+    const rootZoneName = parameters.get(Statics.ssmEnvRootHostedZoneName);
     this.accountRootZone = Route53.HostedZone.fromHostedZoneAttributes(this, 'account-zone', {
       hostedZoneId: rootZoneId,
       zoneName: rootZoneName,
@@ -43,7 +48,7 @@ export class DnsStack extends Stack {
     this.addZoneIdAndNametoParams();
 
     // Development (sandbox) does not have a kms key
-    if (props.branch !== 'development') {
+    if (Statics.isDevelopment(props.branch)) {
       this.setupDnsSec();
     }
 
@@ -96,11 +101,11 @@ export class DnsStage extends Stage {
   constructor(scope: Construct, id: string, props: DnsStageProps) {
     super(scope, id, props);
 
-    const dnsStack = new DnsStack(this, 'dns-stack', {
+    new DnsStack(this, 'dns-stack', {
       branch: props.branch,
     });
 
-    Aspects.of(dnsStack).add(new AwsSolutionsChecks());
+    //Aspects.of(dnsStack).add(new AwsSolutionsChecks());
 
   }
 
