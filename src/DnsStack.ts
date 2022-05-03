@@ -93,7 +93,7 @@ export interface DnsStageProps extends StageProps{
 
 export class DnsStage extends Stage {
 
-  constructor(scope: Construct, id: string, props: DnsStageProps){
+  constructor(scope: Construct, id: string, props: DnsStageProps) {
     super(scope, id, props);
 
     const dnsStack = new DnsStack(this, 'dns-stack', {
@@ -101,7 +101,7 @@ export class DnsStage extends Stage {
     });
 
     Aspects.of(dnsStack).add(new AwsSolutionsChecks());
-    
+
   }
 
 }

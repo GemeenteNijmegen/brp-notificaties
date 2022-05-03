@@ -1,8 +1,6 @@
-import { Aspects, Stage, StageProps } from 'aws-cdk-lib';
-import { AwsSolutionsChecks } from 'cdk-nag';
+import { Stage, StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ApiStack } from './ApiStack';
-import { DnsStack } from './DnsStack';
 
 export interface ApiStageProps extends StageProps {
   branch: string;
