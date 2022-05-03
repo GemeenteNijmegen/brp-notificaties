@@ -27,9 +27,12 @@ export class DnsStack extends Stack {
       zoneName: rootZoneName,
     });
 
+
+    const subdomain = `brp-notificaties.${this.accountRootZone.zoneName}`;
+
     // Create the sub zone (subdomain)
     this.zone = new Route53.HostedZone(this, 'zone', {
-      zoneName: `brp-notificaties.${this.accountRootZone.zoneName}`,
+      zoneName: subdomain,
     });
 
     // Register the subdomain
@@ -39,6 +42,7 @@ export class DnsStack extends Stack {
     new Route53.NsRecord(this, 'zone-delegation', {
       values: this.zone.hostedZoneNameServers,
       zone: this.accountRootZone,
+      recordName: subdomain,
     });
 
     // Export sub zone paramters
