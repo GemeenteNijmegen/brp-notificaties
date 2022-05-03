@@ -8,6 +8,7 @@ export class Statics {
   static readonly ssmEnvRootHostedZoneId: string = '/gemeente-nijmegen/account/hostedzone/id';
   static readonly ssmEnvRootHostedZoneName: string = '/gemeente-nijmegen/account/hostedzone/name';
 
+  static readonly ssmZoneParams: string = '/gemeente-nijmegen/brp-notificaties/hostedzone/';
   static readonly ssmZoneId: string = '/gemeente-nijmegen/brp-notificaties/hostedzone/id';
   static readonly ssmZoneName: string = '/gemeente-nijmegen/brp-notificaties/hostedzone/name';
 
