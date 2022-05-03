@@ -36,9 +36,9 @@ export class DnsStack extends Stack {
     if (this.zone.hostedZoneNameServers == undefined) {
       throw 'brp-notificaties sub hosted zone does not contain nameservers cannot create a zone delegation record';
     }
-    new Route53.ZoneDelegationRecord(this, 'zone-delegation', {
-      nameServers: this.zone.hostedZoneNameServers,
-      zone: this.zone,
+    new Route53.NsRecord(this, 'zone-delegation', {
+      values: this.zone.hostedZoneNameServers,
+      zone: this.accountRootZone,
     });
 
     // Export sub zone paramters
