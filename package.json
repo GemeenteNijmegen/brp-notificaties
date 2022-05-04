@@ -54,6 +54,7 @@
   "dependencies": {
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.22.0-alpha.0",
     "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.22.0-alpha.0",
+    "@types/aws-lambda": "^8.10.95",
     "aws-cdk-lib": "^2.22.0",
     "cdk-nag": "^2.0.0",
     "cdk-remote-stack": "^2.0.8",

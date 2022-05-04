@@ -19,6 +19,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   },
   deps: [
     'cdk-nag@^2.0.0',
+    '@types/aws-lambda',
     'dotenv',
     '@aws-cdk/aws-apigatewayv2-alpha',
     '@aws-cdk/aws-apigatewayv2-integrations-alpha',
