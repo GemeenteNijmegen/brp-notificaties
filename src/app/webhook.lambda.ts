@@ -21,8 +21,8 @@ export const handler: ProxyHandler = async (event, context) => {
       statusCode: 500,
       body: JSON.stringify({
         message: ex,
-      })
-    }
+      }),
+    };
   }
 
 };

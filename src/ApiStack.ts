@@ -1,6 +1,6 @@
 import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
+import { Stack, StackProps, aws_ssm as SSM, aws_s3 as S3 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { WebhookFunction } from './app/webhook-function';
 import { Statics } from './Statics';
@@ -39,9 +39,15 @@ export class ApiStack extends Stack {
    */
   setFunctions() {
 
+    const eventStore = new S3.Bucket(this, 'event-store-bucket');
+
     const webhook = new WebhookFunction(this, 'webhook', {
       description: 'Webhook for brp events',
+      environment: {
+        EVENT_STORE_ARN: eventStore.bucketName,
+      },
     });
+    eventStore.grantWrite(webhook);
 
     this.api.addRoutes({
       integration: new HttpLambdaIntegration('webhook', webhook),

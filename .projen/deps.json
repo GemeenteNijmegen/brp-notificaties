@@ -105,6 +105,10 @@
       "type": "runtime"
     },
     {
+      "name": "aws-sdk",
+      "type": "runtime"
+    },
+    {
       "name": "cdk-nag",
       "version": "^2.0.0",
       "type": "runtime"

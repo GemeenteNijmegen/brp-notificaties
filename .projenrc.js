@@ -24,6 +24,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
     '@aws-cdk/aws-apigatewayv2-alpha',
     '@aws-cdk/aws-apigatewayv2-integrations-alpha',
     'cdk-remote-stack',
+    'aws-sdk',
   ],
   gitignore: [
     'test-reports/junit.xml',
