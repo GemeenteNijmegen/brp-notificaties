@@ -22,7 +22,7 @@ export class EventStore {
     s3.putObject({
       Bucket: process.env.EVENT_STORE_ARN,
       Key: awsRequestId,
-      Body: event,
+      Body: json,
     }, (error, data) => {
       console.error(error);
       console.error(data);
