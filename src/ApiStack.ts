@@ -29,6 +29,8 @@ export class ApiStack extends Stack {
       parameterName: Statics.ssmApiGatewayId,
     });
 
+    this.setFunctions();
+
   }
 
   /**
