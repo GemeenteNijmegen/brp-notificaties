@@ -19,7 +19,7 @@ export class EventStore {
       throw 'No bucket found!';
     }
 
-    s3.putObject({
+    const response = s3.putObject({
       Bucket: process.env.EVENT_STORE_ARN,
       Key: awsRequestId,
       Body: json,
@@ -27,6 +27,8 @@ export class EventStore {
       console.error(error);
       console.error(data);
     });
+
+    console.log(response);
 
     console.log(json);
 
