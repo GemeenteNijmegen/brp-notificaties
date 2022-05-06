@@ -5,26 +5,43 @@ import * as AWS from 'aws-sdk';
 
 export class EventStore {
 
-  static async storeEvent(event: APIGatewayProxyEventV2, awsRequestId: string) {
+  bucket: string;
+  s3: AWS.S3;
 
-    const s3 = new AWS.S3();
+  constructor(bucketName: string | undefined) {
+    if (bucketName == undefined) {
+      throw 'No bucket name provided!';
+    }
+    this.bucket = bucketName;
+
+    this.s3 = new AWS.S3();
+  }
+
+  async storeEvent(event: APIGatewayProxyEventV2, awsRequestId: string) {
 
     let json = JSON.stringify({
       event: event,
       id: awsRequestId,
     });
 
-    if ( process.env.EVENT_STORE_ARN == undefined ) {
-      throw 'No bucket found!';
-    }
-
-    await s3.putObject({
-      Bucket: process.env.EVENT_STORE_ARN,
+    await this.s3.putObject({
+      Bucket: this.bucket,
       Key: awsRequestId,
       Body: json,
     }).promise();
 
-    console.log('Data should be saved', json, process.env.EVENT_STORE_ARN);
+    console.log('End of lambda', json, process.env.EVENT_STORE_ARN);
+
+  }
+
+  async listEvents(from: string | undefined) {
+
+    const events = await this.s3.listObjects({
+      Bucket: this.bucket,
+      Marker: from,
+    }).promise();
+
+    return events;
 
   }
 

@@ -5,20 +5,15 @@ import {
 
 export class EventHandler {
 
-  static handleEvent(event: APIGatewayProxyEventV2): APIGatewayProxyResultV2 {
+  handleEvent(event: APIGatewayProxyEventV2): APIGatewayProxyResultV2 {
 
-
-    var body = JSON.stringify({
-      message: 'Ok',
-    });
-
-    if (event.body != undefined) {
-      body = event.body;
-    }
+    console.log('Event body:', event.body);
 
     return {
       statusCode: 200,
-      body,
+      body: JSON.stringify({
+        message: 'Ok',
+      }),
     };
   }
 

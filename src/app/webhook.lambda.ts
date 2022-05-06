@@ -8,12 +8,24 @@ import { EventStore } from './events/EventStore';
 
 type ProxyHandler = Handler<APIGatewayProxyEventV2, APIGatewayProxyResultV2>;
 
+let eventStore : EventStore;
+let eventHandler: EventHandler;
+
+async function init() {
+  console.log('Initializing webhook lambda');
+  eventStore = new EventStore(process.env.EVENT_STORE_BUCKET);
+  eventHandler = new EventHandler();
+  console.log('Finished initalization');
+}
+
 export const handler: ProxyHandler = async (event, context) => {
 
   try {
 
-    await EventStore.storeEvent(event, context.awsRequestId);
-    return EventHandler.handleEvent(event);
+    await init();
+
+    await eventStore.storeEvent(event, context.awsRequestId);
+    return eventHandler.handleEvent(event);
 
   } catch (ex) {
     console.error(ex);

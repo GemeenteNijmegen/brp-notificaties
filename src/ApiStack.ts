@@ -44,7 +44,7 @@ export class ApiStack extends Stack {
     const webhook = new WebhookFunction(this, 'webhook', {
       description: 'Webhook for brp events',
       environment: {
-        EVENT_STORE_ARN: eventStore.bucketName,
+        EVENT_STORE_BUCKET: eventStore.bucketName,
       },
     });
     eventStore.grantWrite(webhook);

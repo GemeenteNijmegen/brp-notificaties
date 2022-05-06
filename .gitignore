@@ -58,4 +58,5 @@ junit.xml
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
+!/src/app/replay-function.ts
 !/src/app/webhook-function.ts
