@@ -22,14 +22,13 @@ export class EventStore {
       Bucket: process.env.EVENT_STORE_ARN,
       Key: awsRequestId,
       Body: json,
-    })
-      .promise()
-      .then(data => {
-        console.log('Data should be saved in s3', data);
-      })
-      .catch(err => {
-        console.error('Could not save data in s3', err);
-      });
+    }, (error, data) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Data saved? ", data);
+      }
+    }).send();
 
     console.log('Data should be saved', json);
 
