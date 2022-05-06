@@ -23,14 +23,10 @@ export class EventStore {
       Key: awsRequestId,
       Body: json,
     }, (error, data) => {
-      if (error) {
-        console.error(error);
-      } else {
-        console.log("Data saved? ", data);
-      }
+      console.log("In callback!", error, data);
     }).send();
 
-    console.log('Data should be saved', json);
+    console.log('Data should be saved', json, process.env.EVENT_STORE_ARN);
 
   }
 
