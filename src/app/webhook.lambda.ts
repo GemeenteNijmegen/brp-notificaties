@@ -17,12 +17,13 @@ async function init() {
   eventHandler = new EventHandler();
   console.log('Finished initalization');
 }
+const initialization = init();
 
 export const handler: ProxyHandler = async (event, context) => {
 
   try {
 
-    await init();
+    await initialization;
 
     await eventStore.storeEvent(event, context.awsRequestId);
     return eventHandler.handleEvent(event);

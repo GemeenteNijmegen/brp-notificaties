@@ -13,7 +13,6 @@ export class EventStore {
       throw 'No bucket name provided!';
     }
     this.bucket = bucketName;
-
     this.s3 = new AWS.S3();
   }
 
