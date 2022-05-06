@@ -7,7 +7,6 @@ export class EventStore {
 
   static async storeEvent(event: APIGatewayProxyEventV2, awsRequestId: string) {
 
-
     const s3 = new AWS.S3();
 
     let json = JSON.stringify({
@@ -24,13 +23,17 @@ export class EventStore {
       Key: awsRequestId,
       Body: json,
     }, (error, data) => {
+      console.log("In put object callback")
       console.error(error);
       console.error(data);
     });
-    command.send();
+    command.send( (error, data) => {
+      console.log("Data should be saved in s3");
+      console.error(error);
+      console.error(data);
+    });
 
-    console.log(json);
-
+    console.log("Data should be saved", json);
 
   }
 
