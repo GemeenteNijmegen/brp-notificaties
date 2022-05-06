@@ -18,13 +18,11 @@ export class EventStore {
       throw 'No bucket found!';
     }
 
-    s3.putObject({
+    await s3.putObject({
       Bucket: process.env.EVENT_STORE_ARN,
       Key: awsRequestId,
       Body: json,
-    }, (error, data) => {
-      console.log("In callback!", error, data);
-    }).send();
+    }).promise();
 
     console.log('Data should be saved', json, process.env.EVENT_STORE_ARN);
 
