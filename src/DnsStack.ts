@@ -6,6 +6,7 @@ import {
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './Statics';
+import { Utils } from './Utils';
 
 export interface DnsStackProps extends StackProps {
   branch: string;
@@ -24,22 +25,24 @@ export class DnsStack extends Stack {
     super(scope, id);
     this.branch = props.branch;
 
-    // Import root zone
-    const rootZoneId = SSM.StringParameter.valueForStringParameter(this, Statics.ssmEnvRootHostedZoneId);
-    const rootZoneName = SSM.StringParameter.valueForStringParameter(this, Statics.ssmEnvRootHostedZoneName);
-    this.accountRootZone = Route53.HostedZone.fromHostedZoneAttributes(this, 'account-zone', {
-      hostedZoneId: rootZoneId,
-      zoneName: rootZoneName,
-    });
-
-    const subdomain = `brp-notificaties.${this.accountRootZone.zoneName}`;
+    // Import account root zone
+    this.accountRootZone = Utils.importAccountRootZone(this);
 
     // Create the sub zone (subdomain)
+    const subdomain = Statics.getDomainName(props.branch);
     this.zone = new Route53.HostedZone(this, 'zone', {
       zoneName: subdomain,
     });
 
-    // Register the subdomain
+    this.registerSubHostedzone(subdomain);
+    this.addZoneIdAndNametoParams();
+
+  }
+
+  /**
+   * Register sub hosted zone with account root zone
+   */
+  private registerSubHostedzone(subdomain: string) {
     if (this.zone.hostedZoneNameServers == undefined) {
       throw 'brp-notificaties sub hosted zone does not contain nameservers cannot create a zone delegation record';
     }
@@ -48,10 +51,6 @@ export class DnsStack extends Stack {
       zone: this.accountRootZone,
       recordName: subdomain,
     });
-
-    // Export sub zone paramters
-    this.addZoneIdAndNametoParams();
-
   }
 
   /**

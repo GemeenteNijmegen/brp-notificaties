@@ -28,18 +28,17 @@ export class ApiStage extends Stage {
       branch: props.branch,
       description: 'API gateway and lambdas for BRP-events',
     });
-    apiStack.addDependency(certStack);
 
     const dnsStack = new DnsStack(this, 'dns-stack', {
       branch: props.branch,
     });
-    dnsStack.addDependency(apiStack);
 
-    new CloudfrontStack(this, 'cloudfront-stack', {
+    const cloudfrontStack = new CloudfrontStack(this, 'cloudfront-stack', {
       branch: props.branch,
       hostDomain: apiStack.domain(),
     });
-    console.log(apiStack.domain());
+    cloudfrontStack.addDependency(certStack);
+    cloudfrontStack.addDependency(dnsStack);
 
     // Only deploy dnssec on non dev branches
     if (!Statics.isDevelopment(props.branch)) {

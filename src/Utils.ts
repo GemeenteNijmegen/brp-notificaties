@@ -1,4 +1,5 @@
 import {
+  aws_ssm as SSM,
   aws_route53 as Route53,
   aws_certificatemanager as certificatemanager,
 } from 'aws-cdk-lib';
@@ -7,6 +8,24 @@ import { Construct } from 'constructs';
 import { Statics } from './Statics';
 
 export class Utils {
+
+  static importAccountRootZone(stack: Construct) {
+    const rootZoneId = SSM.StringParameter.valueForStringParameter(stack, Statics.ssmEnvRootHostedZoneId);
+    const rootZoneName = SSM.StringParameter.valueForStringParameter(stack, Statics.ssmEnvRootHostedZoneName);
+    return Route53.HostedZone.fromHostedZoneAttributes(stack, 'import-account-zone', {
+      hostedZoneId: rootZoneId,
+      zoneName: rootZoneName,
+    });
+  }
+
+  static importHostedZone(stack: Construct) {
+    const zoneId = SSM.StringParameter.valueForStringParameter(stack, Statics.ssmZoneId);
+    const zoneName = SSM.StringParameter.valueForStringParameter(stack, Statics.ssmZoneName);
+    return Route53.HostedZone.fromHostedZoneAttributes(stack, 'import-zone', {
+      hostedZoneId: zoneId,
+      zoneName: zoneName,
+    });
+  }
 
   static importHostedZoneFromEuWest1(stack: Construct) {
     const parameters = new RemoteParameters(stack, 'import-account-zone-params', {

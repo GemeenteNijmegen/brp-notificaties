@@ -25,6 +25,10 @@ export class ApiStack extends Stack {
 
     this.api = new apigateway.RestApi(this, 'api-gateway', {
       description: 'BRP notificaties api',
+      deployOptions: {
+        stageName: 'api',
+        description: 'BRP events api stage',
+      },
     });
 
     // Store apigateway ID to be used in other stacks
@@ -57,19 +61,6 @@ export class ApiStack extends Stack {
     this.api.root.addMethod('POST', new apigateway.LambdaIntegration(webhook));
 
   }
-
-  // setDnsRecords() {
-  //   // Import hosted zone
-  //   const zone = Utils.importHostedZoneFromEuWest1(this);
-  //   new Route53.ARecord(this, 'a', {
-  //     zone: zone,
-  //     target: Route53.RecordTarget.fromAlias(new Route53Targets.ApiGateway(this.api)),
-  //   });
-  //   new Route53.AaaaRecord(this, 'aaaa', {
-  //     zone: zone,
-  //     target: Route53.RecordTarget.fromAlias(new Route53Targets.ApiGateway(this.api)),
-  //   });
-  // }
 
   /**
    * Clean and return the apigateway subdomain placeholder
