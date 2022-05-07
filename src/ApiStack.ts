@@ -29,7 +29,7 @@ export class ApiStack extends Stack {
     const certificateArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmCertificateArn);
     const cert = certificatemanager.Certificate.fromCertificateArn(this, 'certificate', certificateArn);
 
-    this.api = new apigateway.RestApi(this, 'brp-notificaties-api', {
+    this.api = new apigateway.RestApi(this, 'api-gateway', {
       description: 'BRP notificaties api',
       domainName: {
         domainName: Statics.getDomainName(props.branch),

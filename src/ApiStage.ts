@@ -25,6 +25,7 @@ export class ApiStage extends Stage {
 
     const apiStack = new ApiStack(this, 'api-stack', {
       branch: props.branch,
+      description: 'API gateway and lambdas for BRP-events',
     });
     apiStack.addDependency(certStack);
 
