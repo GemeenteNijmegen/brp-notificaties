@@ -1,6 +1,10 @@
-import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
-import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
+import {
+  Stack,
+  StackProps,
+  aws_ssm as SSM,
+  aws_s3 as S3,
+  aws_apigateway as apigateway,
+} from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { WebhookFunction } from './app/webhook-function';
 import { Statics } from './Statics';
@@ -14,20 +18,27 @@ export interface ApiStackProps extends StackProps {
  */
 export class ApiStack extends Stack {
 
-  api: apigatewayv2.HttpApi;
+  api: apigateway.RestApi;
 
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    this.api = new apigatewayv2.HttpApi(this, 'brp-notificaties-api', {
+    this.api = new apigateway.RestApi(this, 'api-gateway', {
       description: 'BRP notificaties api',
+      deployOptions: {
+        stageName: 'api',
+        description: 'BRP events api stage',
+      },
     });
 
     // Store apigateway ID to be used in other stacks
     new SSM.StringParameter(this, 'ssm_api_1', {
-      stringValue: this.api.httpApiId,
+      stringValue: this.api.restApiId,
       parameterName: Statics.ssmApiGatewayId,
     });
+
+    this.setFunctions();
+    //this.setDnsRecords();
 
   }
 
@@ -37,15 +48,17 @@ export class ApiStack extends Stack {
    */
   setFunctions() {
 
+    const eventStore = new S3.Bucket(this, 'event-store-bucket');
+
     const webhook = new WebhookFunction(this, 'webhook', {
       description: 'Webhook for brp events',
+      environment: {
+        EVENT_STORE_BUCKET: eventStore.bucketName,
+      },
     });
+    eventStore.grantWrite(webhook);
 
-    this.api.addRoutes({
-      integration: new HttpLambdaIntegration('login', webhook),
-      path: '/',
-      methods: [apigatewayv2.HttpMethod.POST],
-    });
+    this.api.root.addMethod('POST', new apigateway.LambdaIntegration(webhook));
 
   }
 
@@ -62,6 +75,7 @@ export class ApiStack extends Stack {
     let cleanedUrl = url
       .replace(/^https?:\/\//, '') //protocol
       .replace(/\/$/, ''); //optional trailing slash
+    cleanedUrl = cleanedUrl.substring(0, cleanedUrl.lastIndexOf('/'));
     return cleanedUrl;
   }
 }

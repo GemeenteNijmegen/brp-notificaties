@@ -46,7 +46,28 @@
       "description": "Prepare assets",
       "steps": [
         {
+          "spawn": "bundle:app/replay.lambda"
+        },
+        {
           "spawn": "bundle:app/webhook.lambda"
+        }
+      ]
+    },
+    "bundle:app/replay.lambda": {
+      "name": "bundle:app/replay.lambda",
+      "description": "Create a JavaScript bundle from src/app/replay.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/replay.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/app/replay.lambda/index.js\" --external:aws-sdk"
+        }
+      ]
+    },
+    "bundle:app/replay.lambda:watch": {
+      "name": "bundle:app/replay.lambda:watch",
+      "description": "Continuously update the JavaScript bundle from src/app/replay.lambda.ts",
+      "steps": [
+        {
+          "exec": "esbuild --bundle src/app/replay.lambda.ts --target=\"node14\" --platform=\"node\" --outfile=\"assets/app/replay.lambda/index.js\" --external:aws-sdk --watch"
         }
       ]
     },
