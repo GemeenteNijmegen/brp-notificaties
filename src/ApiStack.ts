@@ -4,7 +4,6 @@ import {
   aws_ssm as SSM,
   aws_s3 as S3,
   aws_apigateway as apigateway,
-  aws_certificatemanager as certificatemanager,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { WebhookFunction } from './app/webhook-function';
