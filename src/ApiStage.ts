@@ -2,6 +2,7 @@ import { Stage, StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ApiStack } from './ApiStack';
 import { CertificateStack } from './CertificateStack';
+import { CloudfrontStack } from './CloudfrontStack';
 import { DnsSecStack } from './DnsSecStack';
 import { DnsStack } from './DnsStack';
 import { Statics } from './Statics';
@@ -33,6 +34,11 @@ export class ApiStage extends Stage {
       branch: props.branch,
     });
     dnsStack.addDependency(apiStack);
+
+    new CloudfrontStack(this, 'cloudfront-stack', {
+      branch: props.branch,
+      hostDomain: apiStack.domain(),
+    });
 
     // Only deploy dnssec on non dev branches
     if (!Statics.isDevelopment(props.branch)) {

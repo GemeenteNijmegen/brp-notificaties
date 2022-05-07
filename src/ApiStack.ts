@@ -4,8 +4,6 @@ import {
   aws_ssm as SSM,
   aws_s3 as S3,
   aws_apigateway as apigateway,
-  aws_route53 as Route53,
-  aws_route53_targets as Route53Targets,
   aws_certificatemanager as certificatemanager,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
@@ -44,7 +42,7 @@ export class ApiStack extends Stack {
     });
 
     this.setFunctions();
-    this.setDnsRecords();
+    //this.setDnsRecords();
 
   }
 
@@ -68,27 +66,18 @@ export class ApiStack extends Stack {
 
   }
 
-  setDnsRecords() {
-
-    // Import hosted zone
-    const zoneId = SSM.StringParameter.valueForStringParameter(this, Statics.ssmZoneId);
-    const zoneName = SSM.StringParameter.valueForStringParameter(this, Statics.ssmZoneName);
-    const zone = Route53.HostedZone.fromHostedZoneAttributes(this, 'zone', {
-      hostedZoneId: zoneId,
-      zoneName: zoneName,
-    });
-
-    new Route53.ARecord(this, 'a', {
-      zone: zone,
-      target: Route53.RecordTarget.fromAlias(new Route53Targets.ApiGateway(this.api)),
-    });
-
-    new Route53.AaaaRecord(this, 'aaaa', {
-      zone: zone,
-      target: Route53.RecordTarget.fromAlias(new Route53Targets.ApiGateway(this.api)),
-    });
-
-  }
+  // setDnsRecords() {
+  //   // Import hosted zone
+  //   const zone = Utils.importHostedZoneFromEuWest1(this);
+  //   new Route53.ARecord(this, 'a', {
+  //     zone: zone,
+  //     target: Route53.RecordTarget.fromAlias(new Route53Targets.ApiGateway(this.api)),
+  //   });
+  //   new Route53.AaaaRecord(this, 'aaaa', {
+  //     zone: zone,
+  //     target: Route53.RecordTarget.fromAlias(new Route53Targets.ApiGateway(this.api)),
+  //   });
+  // }
 
   /**
    * Clean and return the apigateway subdomain placeholder
