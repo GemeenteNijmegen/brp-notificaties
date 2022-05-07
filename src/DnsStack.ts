@@ -1,4 +1,9 @@
-import { aws_route53 as Route53, Stack, StackProps, aws_ssm as SSM } from 'aws-cdk-lib';
+import {
+  Stack,
+  StackProps,
+  aws_route53 as Route53,
+  aws_ssm as SSM,
+} from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Statics } from './Statics';
 
@@ -26,7 +31,6 @@ export class DnsStack extends Stack {
       hostedZoneId: rootZoneId,
       zoneName: rootZoneName,
     });
-
 
     const subdomain = `brp-notificaties.${this.accountRootZone.zoneName}`;
 

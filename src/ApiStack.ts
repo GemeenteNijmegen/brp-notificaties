@@ -1,6 +1,13 @@
-import * as apigatewayv2 from '@aws-cdk/aws-apigatewayv2-alpha';
-import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { Stack, StackProps, aws_ssm as SSM, aws_s3 as S3 } from 'aws-cdk-lib';
+import {
+  Stack,
+  StackProps,
+  aws_ssm as SSM,
+  aws_s3 as S3,
+  aws_apigateway as apigateway,
+  aws_route53 as Route53,
+  aws_route53_targets as Route53Targets,
+  aws_certificatemanager as certificatemanager,
+} from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { WebhookFunction } from './app/webhook-function';
 import { Statics } from './Statics';
@@ -14,22 +21,30 @@ export interface ApiStackProps extends StackProps {
  */
 export class ApiStack extends Stack {
 
-  api: apigatewayv2.HttpApi;
+  api: apigateway.RestApi;
 
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    this.api = new apigatewayv2.HttpApi(this, 'brp-notificaties-api', {
+    const certificateArn = SSM.StringParameter.valueForStringParameter(this, Statics.certificateArn);
+    const cert = certificatemanager.Certificate.fromCertificateArn(this, 'certificate', certificateArn);
+
+    this.api = new apigateway.RestApi(this, 'brp-notificaties-api', {
       description: 'BRP notificaties api',
+      domainName: {
+        domainName: Statics.getDomainName(props.branch),
+        certificate: cert,
+      },
     });
 
     // Store apigateway ID to be used in other stacks
     new SSM.StringParameter(this, 'ssm_api_1', {
-      stringValue: this.api.httpApiId,
+      stringValue: this.api.restApiId,
       parameterName: Statics.ssmApiGatewayId,
     });
 
     this.setFunctions();
+    this.setDnsRecords();
 
   }
 
@@ -49,10 +64,28 @@ export class ApiStack extends Stack {
     });
     eventStore.grantWrite(webhook);
 
-    this.api.addRoutes({
-      integration: new HttpLambdaIntegration('webhook', webhook),
-      path: '/',
-      methods: [apigatewayv2.HttpMethod.POST],
+    this.api.root.addMethod('POST', new apigateway.LambdaIntegration(webhook));
+
+  }
+
+  setDnsRecords() {
+
+    // Import hosted zone
+    const zoneId = SSM.StringParameter.valueForStringParameter(this, Statics.ssmZoneId);
+    const zoneName = SSM.StringParameter.valueForStringParameter(this, Statics.ssmZoneName);
+    const zone = Route53.HostedZone.fromHostedZoneAttributes(this, 'zone', {
+      hostedZoneId: zoneId,
+      zoneName: zoneName,
+    });
+
+    new Route53.ARecord(this, 'a', {
+      zone: zone,
+      target: Route53.RecordTarget.fromAlias(new Route53Targets.ApiGateway(this.api)),
+    });
+
+    new Route53.AaaaRecord(this, 'aaaa', {
+      zone: zone,
+      target: Route53.RecordTarget.fromAlias(new Route53Targets.ApiGateway(this.api)),
     });
 
   }

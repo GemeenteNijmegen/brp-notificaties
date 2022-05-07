@@ -1,6 +1,7 @@
 import { Stage, StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { ApiStack } from './ApiStack';
+import { CertificateStack } from './CertificateStack';
 import { DnsSecStack } from './DnsSecStack';
 import { DnsStack } from './DnsStack';
 import { Statics } from './Statics';
@@ -17,13 +18,20 @@ export class ApiStage extends Stage {
   constructor(scope: Construct, id: string, props: ApiStageProps) {
     super(scope, id, props);
 
-    new ApiStack(this, 'api-stack', {
+    const certStack = new CertificateStack(this, 'cert-stack', {
+      env: { region: 'us-east-1' },
       branch: props.branch,
     });
 
-    new DnsStack(this, 'dns-stack', {
+    const apiStack = new ApiStack(this, 'api-stack', {
       branch: props.branch,
     });
+    apiStack.addDependency(certStack);
+
+    const dnsStack = new DnsStack(this, 'dns-stack', {
+      branch: props.branch,
+    });
+    dnsStack.addDependency(apiStack);
 
     // Only deploy dnssec on non dev branches
     if (!Statics.isDevelopment(props.branch)) {

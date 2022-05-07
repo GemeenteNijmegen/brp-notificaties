@@ -19,6 +19,10 @@ export class Statics {
    */
   static readonly ssmApiGatewayId: string = '/gemeente-nijmegen/brp-notificaties/api-gateway/id';
 
+  static readonly certificatePath: string = '/cdk/mijn-nijmegen/certificates';
+  static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificates/certificate-arn';
+
+
   /**
    * Pipeline values
    */
@@ -40,6 +44,15 @@ export class Statics {
 
   static isProduction(branch: string | undefined) : boolean {
     return branch == 'production';
+  }
+
+  static getDomainName(branch: string): string {
+    if (this.isDevelopment(branch)) {
+      return 'brp-notificaties.sandbox.csp-nijmegen.nl';
+    } else if (this.isAcceptance(branch)) {
+      return 'brp-notificaties.accp.csp-nijmegen.nl';
+    }
+    return 'brp-notificaties.csp-nijmegen.nl';
   }
 
 }

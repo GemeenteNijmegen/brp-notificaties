@@ -12,19 +12,17 @@ let eventStore : EventStore;
 let eventHandler: EventHandler;
 
 async function init() {
-  console.log('Initializing webhook lambda');
+  console.info('Initializing webhook lambda');
   eventStore = new EventStore(process.env.EVENT_STORE_BUCKET);
   eventHandler = new EventHandler();
-  console.log('Finished initalization');
+  console.info('Finished initalization of lambda');
 }
 const initialization = init();
 
 export const handler: ProxyHandler = async (event, context) => {
-
   try {
 
     await initialization;
-
     await eventStore.storeEvent(event, context.awsRequestId);
     return eventHandler.handleEvent(event);
 
@@ -33,7 +31,7 @@ export const handler: ProxyHandler = async (event, context) => {
     return {
       statusCode: 500,
       body: JSON.stringify({
-        message: ex,
+        message: 'Error on handling the event',
       }),
     };
   }
