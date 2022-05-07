@@ -19,8 +19,8 @@ export class Statics {
    */
   static readonly ssmApiGatewayId: string = '/gemeente-nijmegen/brp-notificaties/api-gateway/id';
 
-  static readonly certificatePath: string = '/cdk/mijn-nijmegen/certificates';
-  static readonly certificateArn: string = '/cdk/mijn-nijmegen/certificates/certificate-arn';
+  static readonly ssmCertificatePath: string = '/gemeente-nijmegen/brp-notificaties/certificates';
+  static readonly ssmCertificateArn: string = '/gemeente-nijmegen/brp-notificaties/certificates/certificate-arn';
 
 
   /**

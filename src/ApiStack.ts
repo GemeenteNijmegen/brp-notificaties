@@ -26,7 +26,7 @@ export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiStackProps) {
     super(scope, id, props);
 
-    const certificateArn = SSM.StringParameter.valueForStringParameter(this, Statics.certificateArn);
+    const certificateArn = SSM.StringParameter.valueForStringParameter(this, Statics.ssmCertificateArn);
     const cert = certificatemanager.Certificate.fromCertificateArn(this, 'certificate', certificateArn);
 
     this.api = new apigateway.RestApi(this, 'brp-notificaties-api', {
