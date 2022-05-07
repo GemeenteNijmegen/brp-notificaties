@@ -84,6 +84,7 @@ export class ApiStack extends Stack {
     let cleanedUrl = url
       .replace(/^https?:\/\//, '') //protocol
       .replace(/\/$/, ''); //optional trailing slash
+    cleanedUrl = cleanedUrl.substring(0, cleanedUrl.lastIndexOf('/'));
     return cleanedUrl;
   }
 }

@@ -39,6 +39,7 @@ export class ApiStage extends Stage {
       branch: props.branch,
       hostDomain: apiStack.domain(),
     });
+    console.log(apiStack.domain());
 
     // Only deploy dnssec on non dev branches
     if (!Statics.isDevelopment(props.branch)) {
