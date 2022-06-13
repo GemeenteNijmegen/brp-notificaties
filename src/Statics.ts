@@ -1,6 +1,13 @@
 export class Statics {
   static readonly projectName : string = 'brp-notificaties';
 
+
+  /**
+   * Event bus parameters
+   */
+  static readonly eventBusName: string = 'brp-notificaties';
+  static readonly eventDetailType: string = 'BRP Notification';
+
   /**
    * DNS parameters
    */

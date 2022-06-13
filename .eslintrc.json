@@ -146,7 +146,7 @@
         "devDependencies": [
           "**/test/**",
           "**/build-tools/**",
-          "src/app/replay.lambda.ts",
+          "src/app/TestSubscription.lambda.ts",
           "src/app/webhook.lambda.ts"
         ],
         "optionalDependencies": false,
