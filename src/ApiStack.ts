@@ -4,6 +4,7 @@ import {
   aws_ssm as SSM,
   aws_s3 as S3,
   aws_apigateway as apigateway,
+  aws_events as eventbridge,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { WebhookFunction } from './app/webhook-function';
@@ -38,7 +39,6 @@ export class ApiStack extends Stack {
     });
 
     this.setFunctions();
-    //this.setDnsRecords();
 
   }
 
@@ -49,14 +49,17 @@ export class ApiStack extends Stack {
   setFunctions() {
 
     const eventStore = new S3.Bucket(this, 'event-store-bucket');
+    const eventbus = eventbridge.EventBus.fromEventBusName(this, 'eventbus', Statics.eventBusName);
 
     const webhook = new WebhookFunction(this, 'webhook', {
       description: 'Webhook for brp events',
       environment: {
         EVENT_STORE_BUCKET: eventStore.bucketName,
+        EVENT_BUS_NAME: eventbus.eventBusName,
       },
     });
     eventStore.grantWrite(webhook);
+    eventbus.grantPutEventsTo(webhook);
 
     this.api.root.addMethod('POST', new apigateway.LambdaIntegration(webhook));
 
