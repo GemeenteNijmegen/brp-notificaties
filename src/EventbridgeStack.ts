@@ -31,7 +31,7 @@ export class EventbridgeStack extends Stack {
       sourceEventBus: this.bus,
       description: 'Event bus archive for replaying brp-notification events',
       eventPattern: {
-        detailType: [Statics.eventDetailType]
+        detailType: [Statics.eventDetailType],
       },
     });
 
@@ -46,12 +46,12 @@ export class EventbridgeStack extends Stack {
     new eventbridge.Rule(this, 'test-subscription-rule', {
       eventBus: this.bus,
       targets: [
-        new targets.LambdaFunction(lambda)
+        new targets.LambdaFunction(lambda),
       ],
       eventPattern: {
-        detailType: [Statics.eventDetailType]
-      }
-    })
+        detailType: [Statics.eventDetailType],
+      },
+    });
 
 
   }

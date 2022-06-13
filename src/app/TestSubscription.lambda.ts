@@ -1,5 +1,5 @@
 import {
-  EventBridgeHandler
+  EventBridgeHandler,
 } from 'aws-lambda';
 
 interface BrpEvent {
@@ -22,7 +22,7 @@ export const handler: BrpEventSubscription = async (event) => {
 
     return {
       status: 200,
-    }
+    };
 
   } catch (ex) {
 
@@ -30,7 +30,7 @@ export const handler: BrpEventSubscription = async (event) => {
 
     return {
       status: 500,
-    }
+    };
   }
 
 };
