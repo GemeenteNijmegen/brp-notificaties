@@ -1,41 +1,36 @@
 import {
-  Handler,
-  APIGatewayProxyEventV2,
-  APIGatewayProxyResultV2,
+  EventBridgeHandler
 } from 'aws-lambda';
-import { EventStore } from './events/EventStore';
 
-var eventStore: EventStore;
-
-async function init() {
-  console.log('Initializing replay lambda');
-  eventStore = new EventStore(process.env.EVENT_STORE_BUCKET);
+interface BrpEvent {
+  timestamp?: string;
+  bsn?: string;
 }
-const initialization = init();
 
-type ProxyHandler = Handler<APIGatewayProxyEventV2, APIGatewayProxyResultV2>;
+interface BrpEventResponse {
+  status: number;
+}
 
-export const handler: ProxyHandler = async (event, context) => {
+type BrpEventSubscription = EventBridgeHandler<'BRP Notification', BrpEvent, BrpEventResponse>;
+
+export const handler: BrpEventSubscription = async (event) => {
 
   try {
 
-    await initialization;
+    console.log(event);
+    console.log(event.detail);
 
     return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'ok',
-      }),
-    };
+      status: 200,
+    }
 
   } catch (ex) {
+
     console.error(ex);
+
     return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: ex,
-      }),
-    };
+      status: 500,
+    }
   }
 
 };
