@@ -2,8 +2,8 @@ const { awscdk } = require('projen');
 const { JobPermission } = require('projen/lib/github/workflows-model');
 
 const project = new awscdk.AwsCdkTypeScriptApp({
-  projenVersion: '0.54.51',
-  cdkVersion: '2.22.0',
+  projenVersion: '0.58.7',
+  cdkVersion: '2.27.0',
   license: 'EUPL-1.2',
   name: 'brp-notificaties',
   release: true,
