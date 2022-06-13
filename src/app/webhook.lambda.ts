@@ -24,6 +24,7 @@ export const handler: ProxyHandler = async (event, context) => {
   try {
 
     await initialization;
+    await eventStore.storeEvent(event, context.awsRequestId);
     return await eventHandler.handleEvent(event);
 
   } catch (ex) {
