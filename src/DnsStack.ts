@@ -29,12 +29,12 @@ export class DnsStack extends Stack {
     this.accountRootZone = Utils.importAccountRootZone(this);
 
     // Create the sub zone (subdomain)
-    const subdomain = Statics.getDomainName(props.branch);
+    const domainname = Statics.getDomainName(props.branch);
     this.zone = new Route53.HostedZone(this, 'zone', {
-      zoneName: subdomain,
+      zoneName: domainname,
     });
 
-    this.registerSubHostedzone(subdomain);
+    this.registerSubHostedzone(Statics.subdomain);
     this.addZoneIdAndNametoParams();
 
   }
