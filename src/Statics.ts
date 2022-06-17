@@ -1,6 +1,7 @@
 export class Statics {
   static readonly projectName : string = 'brp-notificaties';
 
+  static readonly subdomain: string = 'brp-notificaties';
 
   /**
    * Event bus parameters
@@ -55,11 +56,11 @@ export class Statics {
 
   static getDomainName(branch: string): string {
     if (this.isDevelopment(branch)) {
-      return 'brp-notificaties.sandbox.csp-nijmegen.nl';
+      return `${Statics.subdomain}.sandbox.csp-nijmegen.nl`;
     } else if (this.isAcceptance(branch)) {
-      return 'brp-notificaties.accp.csp-nijmegen.nl';
+      return `${Statics.subdomain}.accp.csp-nijmegen.nl`;
     }
-    return 'brp-notificaties.csp-nijmegen.nl';
+    return `${Statics.subdomain}.csp-nijmegen.nl`;
   }
 
 }
