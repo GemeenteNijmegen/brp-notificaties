@@ -39,6 +39,7 @@ export class ApiStack extends Stack {
     });
 
     this.setFunctions();
+    this.setApiKey();
 
   }
 
@@ -63,6 +64,27 @@ export class ApiStack extends Stack {
 
     this.api.root.addMethod('POST', new apigateway.LambdaIntegration(webhook));
 
+  }
+
+  /**
+   * Setup usage plan and api key
+   */
+  setApiKey() {
+    const plan = this.api.addUsagePlan('brp-notificaties-throtle', {
+      throttle: {
+        rateLimit: 10,
+        burstLimit: 10,
+      },
+    });
+
+    // Create new API Key
+    const key = this.api.addApiKey('brp-notificaties-api-key');
+    plan.addApiKey(key);
+
+    // Add Stage to Plan
+    plan.addApiStage({
+      stage: this.api.deploymentStage,
+    });
   }
 
   /**
