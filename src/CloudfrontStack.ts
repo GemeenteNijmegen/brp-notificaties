@@ -4,6 +4,7 @@ import {
   Duration,
   aws_route53 as Route53,
   aws_route53_targets as Route53Targets,
+  aws_s3 as S3,
 } from 'aws-cdk-lib';
 import {
   Distribution,
@@ -11,7 +12,6 @@ import {
   AllowedMethods, SecurityPolicyProtocol, ViewerProtocolPolicy,
 } from 'aws-cdk-lib/aws-cloudfront';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { Bucket, BlockPublicAccess, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { Statics } from './Statics';
 import { Utils } from './Utils';
@@ -93,9 +93,9 @@ export class CloudfrontStack extends Stack {
    * @returns s3.Bucket
    */
   logBucket() {
-    const cfLogBucket = new Bucket(this, 'CloudfrontLogs', {
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      encryption: BucketEncryption.S3_MANAGED,
+    const cfLogBucket = new S3.Bucket(this, 'CloudfrontLogs', {
+      ...Utils.defaultS3BucketConfig,
+      encryption: S3.BucketEncryption.S3_MANAGED,
       lifecycleRules: [
         {
           id: 'delete objects after 180 days',
