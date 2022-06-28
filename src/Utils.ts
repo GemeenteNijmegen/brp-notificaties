@@ -2,12 +2,19 @@ import {
   aws_ssm as SSM,
   aws_route53 as Route53,
   aws_certificatemanager as certificatemanager,
+  aws_s3 as S3,
 } from 'aws-cdk-lib';
 import { RemoteParameters } from 'cdk-remote-stack';
 import { Construct } from 'constructs';
 import { Statics } from './Statics';
 
 export class Utils {
+
+  static readonly defaultS3BucketConfig = {
+    blockPublicAccess: S3.BlockPublicAccess.BLOCK_ALL,
+    eventBridgeEnabled: true,
+    enforceSSL: true,
+  };
 
   static importAccountRootZone(stack: Construct) {
     const rootZoneId = SSM.StringParameter.valueForStringParameter(stack, Statics.ssmEnvRootHostedZoneId);

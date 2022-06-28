@@ -9,6 +9,7 @@ import {
 import { Construct } from 'constructs';
 import { WebhookFunction } from './app/webhook-function';
 import { Statics } from './Statics';
+import { Utils } from './Utils';
 
 export interface ApiStackProps extends StackProps {
   branch: string;
@@ -49,7 +50,9 @@ export class ApiStack extends Stack {
    */
   setFunctions() {
 
-    const eventStore = new S3.Bucket(this, 'event-store-bucket');
+    const eventStore = new S3.Bucket(this, 'event-store-bucket', {
+      ...Utils.defaultS3BucketConfig,
+    });
     const eventbus = eventbridge.EventBus.fromEventBusName(this, 'eventbus', Statics.eventBusName);
 
     const webhook = new WebhookFunction(this, 'webhook', {
