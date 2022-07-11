@@ -60,3 +60,4 @@ junit.xml
 .parcel-cache/
 !/src/app/TestSubscription-function.ts
 !/src/app/webhook-function.ts
+!/.github/workflows/emergency.yml
