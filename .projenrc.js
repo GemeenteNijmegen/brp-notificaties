@@ -12,7 +12,7 @@
  * 10. Remove gitignore property (now set by default in project type)
  * 11. Remove workflowBootstapSteps (setup cfn-lint, now handled by project type)
  * 12. Remove postBuiltSteps (save cf templates, now handled by project type)
- * 13. Remove Github CloudFormation diff workflow (now handled by project type) 
+ * 13. Remove Github CloudFormation diff workflow (now handled by project type)
  * 14. Add property enableCfnDiffworkflow: true
  * 15. Add property enableEmergencyProcedure: true
  * 16. Add property enableCfnLintOnGithub: true
@@ -34,6 +34,9 @@ const project = new GemeenteNijmegenCdkApp({
     'cdk-remote-stack',
     'aws-sdk',
   ],
+  enableCfnDiffWorkflow: true,
+  enableCfnLintOnGithub: true,
+  enableEmergencyProcedure: true,
 });
 
 project.synth();
