@@ -14,7 +14,7 @@ const project = new GemeenteNijmegenCdkApp({
     'cdk-remote-stack',
     'aws-sdk',
   ],
-  enableCfnDiffWorkflow: true,
+  enableCfnDiffWorkflow: false,
   enableCfnLintOnGithub: true,
   enableEmergencyProcedure: true,
 });
