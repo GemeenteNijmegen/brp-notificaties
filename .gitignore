@@ -35,7 +35,6 @@ test/__snapshots__/*
 .env
 .vscode
 .DS_Store
-!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -60,3 +59,4 @@ junit.xml
 .parcel-cache/
 !/src/app/replay-function.ts
 !/src/app/webhook-function.ts
+!/.projenrc.js
